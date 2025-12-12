@@ -3,11 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Sanctum\HasApiTokens;
 
 class Blog extends Model
 {
-
     protected $table = 'blogs';
 
     protected $fillable = [
@@ -15,6 +13,22 @@ class Blog extends Model
         'subtitle',
         'description',
         'image',
-        'price'
+        'price',
     ];
+
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        return asset('storage/blogs/' . $this->image);
+    }
+    // Define relationship with Category
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

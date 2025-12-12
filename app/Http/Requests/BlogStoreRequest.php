@@ -41,11 +41,11 @@ class BlogStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'title.required' => 'title is required!',
-            'subtitle.required' => 'subtitle is required!',
-            'description.required' => 'description is required!',
-            'image.required' => 'image is required!',
-            'price.required' => 'price is required!'
+            'title.required' => 'Name is required!',
+            'subtitle.required' => 'Subtitle is required!',
+            'description.required' => 'Description is required!',
+            'image.required' => 'Image is required!',
+            'price.required' => 'Price is required!'
         ];
     }
 }
