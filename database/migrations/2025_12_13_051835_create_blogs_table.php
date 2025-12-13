@@ -13,12 +13,20 @@ return new class extends Migration
     {
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('category_id')
+                ->constrained('categories')
+                ->cascadeOnDelete();
+
+            $table->foreignId('sub_category_id')
+                ->constrained('sub_categories')
+                ->cascadeOnDelete();
+
             $table->string('title');
             $table->string('subtitle');
             $table->text('description');
             $table->string('image')->nullable();
             $table->decimal('price', 8, 2);
-
             $table->timestamps();
         });
     }
@@ -30,4 +38,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('blogs');
     }
+    
 };

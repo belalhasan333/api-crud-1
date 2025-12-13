@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Blog extends Model
 {
-    protected $table = 'blogs';
-
     protected $fillable = [
+        'category_id',
+        'sub_category_id',
         'title',
         'subtitle',
         'description',
@@ -20,15 +20,18 @@ class Blog extends Model
 
     public function getImageUrlAttribute()
     {
-        if (!$this->image) {
-            return null;
-        }
-
-        return asset('storage/blogs/' . $this->image);
+        return $this->image
+            ? asset('storage/blogs/' . $this->image)
+            : null;
     }
-    // Define relationship with Category
+
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubCategoryController;
 
 // Blogs Routes
 Route::prefix('blogs')->name('blogs.')->group(function () {
@@ -26,6 +27,9 @@ Route::prefix('categories')->name('categories.')->group(function () {
     Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy');
 
 });
+
+// Sub Categories Routes
+Route::apiResource('sub-categories', SubCategoryController::class);
 
 // Auth User Route
 Route::get('/user', function (Request $request) {

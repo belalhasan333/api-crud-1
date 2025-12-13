@@ -40,8 +40,10 @@ class CategoryController extends Controller
         }
 
         $category = Category::create([
-            'name' => $request->name
+            'name' => $request->name ,
+           
         ]);
+        // dd($request->$category);
 
         return response()->json([
             'status' => 201,
@@ -87,6 +89,7 @@ class CategoryController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'sub_category' => 'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -98,7 +101,8 @@ class CategoryController extends Controller
         }
 
         $category->update([
-            'name' => $request->name
+            'name' => $request->name,
+            'sub_category' => $request->input('sub_category')
         ]);
 
         return response()->json([

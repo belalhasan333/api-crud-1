@@ -33,6 +33,8 @@ class BlogController extends Controller
 
             // Create blog
             $blog = Blog::create([
+                'category_id' => $request->category_id,
+                'sub_category_id' => $request->input('sub_category_id'),
                 'title' => $request->title,
                 'subtitle' => $request->subtitle,
                 'description' => $request->description,
@@ -41,7 +43,6 @@ class BlogController extends Controller
             ]);
 
             return $this->success("Blog created successfully", $blog);
-
         } catch (\Exception $e) {
             return $this->error("Something went wrong", 500, $e->getMessage());
         }
@@ -76,11 +77,12 @@ class BlogController extends Controller
             }
 
             // Update base fields
+            $blog->category_id = $request->category_id;
+            $blog->sub_category_id= $request->input('sub_category_id');
             $blog->title = $request->title;
             $blog->subtitle = $request->subtitle;
             $blog->description = $request->description;
             $blog->price = $request->price;
-            $blog->category_id = $request->category_id;
 
             // Update image if new one uploaded
             if ($request->hasFile('image')) {
@@ -95,26 +97,25 @@ class BlogController extends Controller
             return $this->success("Blog updated successfully", [
                 'blog' => $blog
             ]);
-
         } catch (\Exception $e) {
             return $this->error("Something went wrong", 500, $e->getMessage());
         }
     }
     // Delete blog
-   public function destroy($id)
-{
-    $blog = Blog::find($id);
+    public function destroy($id)
+    {
+        $blog = Blog::find($id);
 
-    if (!$blog) {
-        return $this->error("Blog not found", 404);
+        if (!$blog) {
+            return $this->error("Blog not found", 404);
+        }
+
+        // delete old image
+        $this->deleteImage($blog->image);
+
+        // delete blog
+        $blog->delete();
+
+        return $this->success("Blog deleted successfully");
     }
-
-    // delete old image
-    $this->deleteImage($blog->image);
-
-    // delete blog
-    $blog->delete();
-
-    return $this->success("Blog deleted successfully");
-}
 }

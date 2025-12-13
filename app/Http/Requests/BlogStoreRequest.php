@@ -3,49 +3,44 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
 class BlogStoreRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
-        // Store → POST
+        $rules = [
+            'category_id'     => 'required|exists:categories,id',
+            'sub_category_id' => 'required|exists:sub_categories,id',
+            'title'           => 'required|string|max:255',
+            'subtitle'        => 'required|string|max:255',
+            'description'     => 'required|string',
+            'price'           => 'required|numeric',
+        ];
+
         if ($this->isMethod('post')) {
-            return [
-                'title' => 'required|string|max:258',
-                'subtitle' => 'required|string|max:258',
-                'description' => 'required|string',
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'price' => 'required|numeric'
-            ];
+            $rules['image'] = 'required|image|mimes:jpeg,png,jpg,webp|max:2048';
         }
 
-        // Update → PUT/PATCH
         if ($this->isMethod('put') || $this->isMethod('patch')) {
-            return [
-                'title' => 'required|string|max:258',
-                'subtitle' => 'required|string|max:258',
-                'description' => 'required|string',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'price' => 'required|numeric'
-            ];
+            $rules['image'] = 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048';
         }
 
-        return [];
+        return $rules;
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'title.required' => 'Name is required!',
-            'subtitle.required' => 'Subtitle is required!',
-            'description.required' => 'Description is required!',
-            'image.required' => 'Image is required!',
-            'price.required' => 'Price is required!'
+            'category_id.required'     => 'Category is required!',
+            'sub_category_id.required' => 'Sub-category is required!',
         ];
     }
 }
+
+
+
+
